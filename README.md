@@ -1,27 +1,25 @@
 # fullstack-skills
 
-Five Claude Code skills that combine the best of [superpowers](https://github.com/obra/superpowers) and [gstack](https://github.com/garrytan/gstack) into a unified, self-contained sprint workflow.
+Five Claude Code skills for a complete sprint workflow — from idea to shipped PR.
 
 ```
 /think → /plan → /build → /review → /ship
 ```
 
-No dependency on superpowers or gstack being installed.
-
 ## What It Is
 
-| Skill | Role | Combines |
-|-------|------|---------|
-| `/think` | Product Thinking | gstack `/office-hours` + superpowers `brainstorming` |
-| `/plan` | Architecture + Tasks | gstack `/plan-eng-review` + superpowers `writing-plans` |
-| `/build` | TDD Implementation | superpowers `test-driven-development` + gstack quality |
-| `/review` | Quality Gate | gstack `/review` + gstack `/cso` + superpowers `requesting-code-review` |
-| `/ship` | Verified Release | superpowers `verification-before-completion` + gstack `/ship` |
+| Skill | Role | What it does |
+|-------|------|-------------|
+| `/think` | Product Thinking | Challenges your framing, extracts real pain, writes a spec |
+| `/plan` | Architecture + Tasks | ASCII diagrams, edge cases, TDD-ready task breakdown |
+| `/build` | TDD Implementation | Red → Green → Commit, hard gate on application logic |
+| `/review` | Quality Gate | Production bugs + OWASP/STRIDE security + plan compliance |
+| `/ship` | Verified Release | Tests must pass before PR opens — no exceptions |
 
 ## Install
 
 ```bash
-git clone https://github.com/your-username/fullstack-skills.git ~/.claude/skills/fullstack-skills
+git clone https://github.com/zmzhace/fullstack-skills.git ~/.claude/skills/fullstack-skills
 ```
 
 Add to your project's `CLAUDE.md`:
