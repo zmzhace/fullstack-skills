@@ -5,17 +5,14 @@ description: "Implements the plan using strict TDD. Hard gate: no application lo
 
 # Build — Test-Driven Implementation
 
-Implement the plan task by task. Red → Green → Commit.
+Implement the plan task by task. Red → Green → Refactor → Commit.
 
 ## Starting Check
 
 Look for the latest plan in `docs/plans/` using this resolution order:
 1. Sort files matching `docs/plans/YYYY-MM-DD-*.md` by filename descending
 2. If multiple files share the same date, ask the user to select
-3. If no files match the pattern, prompt: "No plan found. Enter path manually, or run `/plan` first."
-
-If a plan is found but not required:
-> "No plan found in `docs/plans/`. I recommend running `/plan` first. Continue anyway? (y/n)"
+3. If no files match the pattern, prompt: "No plan found. Run `/plan` first, provide a path, or describe the tasks inline to continue without a plan."
 
 ## The Hard Gate
 
@@ -45,13 +42,19 @@ For each task in the plan, repeat:
 - Run the test — verify it passes
 - Run the full test suite — verify nothing regressed
 
-**4. Commit**
+**4. Refactor**
+- Review what you just wrote: rename for clarity, extract duplication, simplify conditionals
+- Only touch code covered by the tests you just wrote — no drive-by refactors
+- Run the full test suite again — still green? Proceed. Broke something? Undo and try a smaller refactor.
+
+**5. Commit**
 ```bash
 git add <test-file> <implementation-file>
-git commit -m "feat: [what this task implements]"
+git commit -m "<type>: [what this task implements]"
 ```
+Choose the commit type based on the change: `feat:` for new functionality, `fix:` for bug fixes, `refactor:` for restructuring without behavior change, `test:` for test-only changes.
 
-**5. Move to next task**
+**6. Move to next task**
 
 ## Unit Design Rules
 

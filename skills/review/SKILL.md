@@ -1,11 +1,11 @@
 ---
 name: review
-description: "Three-pass code review: production bugs (Staff Engineer), security threats (OWASP+STRIDE), and plan compliance. Auto-fixes style issues, flags logic and security for human approval."
+description: "Three-pass code review: production bugs (Staff Engineer), security threats (OWASP+STRIDE), and plan compliance. All findings require human approval."
 ---
 
 # Review — Multi-Perspective Quality Gate
 
-Three passes: production bugs, security threats, plan compliance. Auto-fix what's safe. Flag the rest.
+Three passes: production bugs, security threats, plan compliance. Present findings; let the user decide.
 
 ## Starting Check
 
@@ -26,7 +26,7 @@ Think like a Staff Engineer doing pre-production review. For every component cha
 - **N+1 queries**: Does any loop make database or API calls?
 - **Validation gaps**: Is input validated at system boundaries, or trusted too far inside?
 
-Label each finding: `FIXED`, `ASK`, or `INFO` (see Auto-Fix Rules below).
+Label each finding: `ASK` or `INFO` (see Fix Rules below).
 
 ## Pass 2: Security Officer — OWASP + STRIDE
 
@@ -35,17 +35,27 @@ Only report findings where you can describe a **concrete exploit scenario** in t
 
 If you cannot fill in all three fields with specifics, do not report the finding.
 
-**OWASP Top 10** — check for:
+**OWASP Top 10** — select checks relevant to the layers touched by this change:
+
+*API / Backend:*
 - Injection (SQL, command, LDAP, template)
 - Broken authentication / session management
-- Sensitive data exposure (secrets in logs, unencrypted storage at rest)
-- XML External Entity (XXE) if XML is parsed
 - Broken access control (can User A access User B's data?)
-- Security misconfiguration (debug mode on, default credentials, verbose errors)
-- XSS (if any HTML is rendered or user content is reflected)
 - Insecure deserialization
-- Components with known vulnerabilities (check major dependency versions)
 - Insufficient logging (are auth failures, access denials, and errors logged?)
+
+*Frontend / HTML rendering:*
+- XSS (user content reflected or rendered)
+- Security misconfiguration (debug mode on, verbose errors)
+
+*Data / Storage:*
+- Sensitive data exposure (secrets in logs, unencrypted storage at rest)
+- XML External Entity (XXE) — only if XML is parsed
+
+*Dependencies:*
+- Components with known vulnerabilities (check major dependency versions)
+
+Skip categories that have zero relevance to the changed code. Do not force findings where none exist.
 
 **STRIDE** — for each trust boundary in the changed code:
 - **Spoofing**: Can an attacker impersonate another user or service?
@@ -66,29 +76,31 @@ Compare the implementation against the latest plan:
 
 Gaps in implementation are `ASK`. Scope creep is `INFO`.
 
-## Auto-Fix Rules
+## Fix Rules
 
-**AUTO-FIX without asking** (mechanical, reversible, no behavior change):
-- Code style violations (formatting, indentation, trailing whitespace)
-- Unused imports
-- Missing return type annotations (when type is unambiguous)
-- Obvious dead code with no side effects
+All findings are **ASK** or **INFO**. Do not auto-fix any code — even mechanical changes can mask issues or conflict with the project's formatter/linter setup. Present findings; let the user decide.
 
-After any auto-fix: run the test suite and show the output before continuing.
+**ASK** (requires human decision before changing):
+- Any logic change
+- Any interface change (function signature, API shape, data schema)
+- All security findings
+- Resource leaks, missing error handling
+- Anything that changes observable behavior
+
+**INFO** (notable but not blocking):
+- Style observations (the project's linter should handle these)
+- Potential dead code
+- Scope creep (code with no corresponding plan task)
 
 **Test runner discovery order** (stop at first match):
 1. `package.json` → use `scripts.test`
 2. `Makefile` → look for `test` target
-3. `pyproject.toml` → run `pytest`
-4. `pytest.ini` → run `pytest`
+3. `pyproject.toml` / `pytest.ini` → run `pytest`
+4. `go.mod` → run `go test ./...`
+5. `Cargo.toml` → run `cargo test`
+6. `build.gradle` / `pom.xml` → run `./gradlew test` or `mvn test`
 
-If no runner found: prompt the user for the test command before applying any auto-fix.
-
-**ASK before changing** (requires human judgment):
-- Any logic change
-- Any interface change (function signature, API shape, data schema)
-- All security findings
-- Anything that changes observable behavior
+If no runner found: prompt the user for the test command.
 
 ## Output Format
 
@@ -96,7 +108,6 @@ If no runner found: prompt the user for the test command before applying any aut
 ## Review Report
 
 ### Pass 1: Production Bugs
-FIXED: [what was auto-fixed and why it was safe to fix]
 ASK: [finding] — [why it needs your decision] — Recommended: [option A] or [option B]
 INFO: [observation — notable but not blocking]
 

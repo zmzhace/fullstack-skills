@@ -20,19 +20,16 @@ Invoke `/think` whenever:
 
 ## The Six Forcing Questions
 
-Ask these one at a time. Wait for the user's answer before asking the next. Do not bundle multiple questions.
+Present all six questions at once so the user can answer in a single pass. If the user provided context when invoking `/think` (e.g., `/think I want rate limiting because bots scraped us 50k times`), mark questions already answered by that context and only ask the remaining ones.
 
 1. **The Pain Question**: "What specific frustration or failure triggered this idea? Describe the last time this problem hurt you — what happened?"
-
 2. **The Person Question**: "Who exactly has this pain? Name their role, their context, their frequency of hitting this problem."
-
 3. **The Workaround Question**: "What do they do today instead? How bad is that workaround — cost, time, embarrassment?"
-
 4. **The Timing Question**: "Why is this the right time to build this? What changed that makes this solvable now?"
-
 5. **The Success Question**: "If this works perfectly, what's measurably different in 30 days? What can someone do that they couldn't before?"
-
 6. **The Wedge Question**: "What's the smallest version you could ship tomorrow that proves the core idea works? What would you cut?"
+
+If any answers are too vague or conflicting, follow up on those specific questions only — do not re-ask what's already clear.
 
 ## After the Six Questions
 
@@ -70,6 +67,9 @@ Date: YYYY-MM-DD
 
 ## Approach
 [The chosen implementation approach with rationale]
+
+## Technical Constraints
+[Known tech stack limitations, infrastructure requirements, compatibility needs, performance budgets]
 
 ## Out of Scope
 [What we explicitly are NOT building]

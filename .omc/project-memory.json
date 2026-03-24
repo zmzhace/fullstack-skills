@@ -1,0 +1,102 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1774311382539,
+  "projectRoot": "/Users/Zhuanz/fullstack-skills",
+  "techStack": {
+    "languages": [],
+    "frameworks": [],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "docs"
+    ],
+    "gitBranches": {
+      "defaultBranch": "master",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "docs": {
+      "path": "docs",
+      "purpose": "Documentation",
+      "fileCount": 1,
+      "lastAccessed": 1774311382497,
+      "keyFiles": [
+        "workflow.md"
+      ]
+    },
+    "skills": {
+      "path": "skills",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1774311382498,
+      "keyFiles": []
+    },
+    "skills/build": {
+      "path": "skills/build",
+      "purpose": "Build output",
+      "fileCount": 1,
+      "lastAccessed": 1774311382499,
+      "keyFiles": [
+        "SKILL.md"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "skills/review/SKILL.md",
+      "accessCount": 9,
+      "lastAccessed": 1774311942389,
+      "type": "file"
+    },
+    {
+      "path": "skills/think/SKILL.md",
+      "accessCount": 5,
+      "lastAccessed": 1774311910292,
+      "type": "file"
+    },
+    {
+      "path": "skills/plan/SKILL.md",
+      "accessCount": 5,
+      "lastAccessed": 1774311910853,
+      "type": "file"
+    },
+    {
+      "path": "skills/ship/SKILL.md",
+      "accessCount": 5,
+      "lastAccessed": 1774311911740,
+      "type": "file"
+    },
+    {
+      "path": "README.md",
+      "accessCount": 2,
+      "lastAccessed": 1774311666786,
+      "type": "file"
+    },
+    {
+      "path": "docs/workflow.md",
+      "accessCount": 2,
+      "lastAccessed": 1774311666859,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

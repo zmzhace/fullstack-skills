@@ -7,6 +7,13 @@ description: "Verified release: runs full test suite, checks coverage, syncs mai
 
 No assertions without evidence. Show the output, then ship.
 
+## Pre-Flight Check
+
+Before anything else, check the current branch:
+- If on `main` or `master`: **stop immediately**.
+  > "You're on `main`. Create a feature branch first: `git checkout -b feat/<name>`. Then re-run `/ship`."
+- If the branch has no commits ahead of main: warn and confirm before proceeding.
+
 ## The Hard Gate
 
 **Cannot open a PR without showing actual passing test terminal output.**
@@ -29,9 +36,11 @@ After tests pass, run coverage and show the report.
 
 **Default threshold: 80%**
 
-Override options (checked in this order):
-1. `COVERAGE_THRESHOLD` environment variable
+Threshold resolution order (stop at first match):
+1. Project's own coverage config (`jest.config.js` coverageThreshold, `pyproject.toml [tool.coverage]`, `codecov.yml`, `.nycrc`)
 2. `.fullstack` config file with key `coverage_threshold: <number>`
+3. `COVERAGE_THRESHOLD` environment variable
+4. Default: 80%
 
 If coverage meets threshold: proceed.
 
