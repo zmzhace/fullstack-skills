@@ -41,8 +41,8 @@ digraph build {
     fails -> green [label="yes"];
     green -> run2;
     run2 -> allpass;
-    allpass -> fixImpl [label="no"];
-    fixImpl -> run2;
+    allpass -> fiximpl [label="no"];
+    fiximpl -> run2;
     allpass -> refact [label="yes"];
     refact -> run3;
     run3 -> stillg;
@@ -68,16 +68,17 @@ Look for the latest plan in `docs/plans/` using this resolution order:
 
 ```
 NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST
+(application logic only — see Exceptions below)
 ```
 
 If you wrote implementation code before a failing test:
 - **Delete it.** Not "keep as reference." Delete it.
 - Start over with the test.
-- No exceptions. Not even for "obvious" code.
+- No exceptions for application logic. Not even for "obvious" code.
 
 This applies to: functions, classes, API handlers, data transformations, validation logic, business rules.
 
-This does NOT apply to: database migrations, environment config files, generated code, infrastructure definitions, CSS/styling. For these, document what you changed and why in a comment.
+This does NOT apply to: database migrations, environment config files, generated code, infrastructure definitions, CSS/styling. For these, document what you changed and why in a comment (see TDD Applicability section).
 
 Thinking "skip TDD just this once"? That's rationalization. Stop.
 
@@ -131,6 +132,19 @@ Exceptions — document instead of test:
 - **Environment/config files** → comment explaining each setting's purpose
 - **Generated code** → note what generates it and how to regenerate
 - **Infrastructure definitions** → describe the resource and its intended state
+
+## When Implementation Breaks Down
+
+If a task's implementation fails repeatedly and the root cause isn't a code bug but a design flaw (wrong abstraction, missing dependency, incorrect data model), **stop building and escalate**:
+
+> "Task N is failing because [describe the design problem]. The current plan assumes [assumption] but the codebase shows [reality]. Recommend returning to `/plan` to revise the affected tasks before continuing."
+
+Do not force a broken design to pass tests. Surface the issue and let the user decide.
+
+Signs you need to escalate to `/plan`:
+- Each fix reveals a new problem in a different component
+- You're writing implementation that no reasonable test could exercise
+- The plan's file structure no longer matches what you're actually building
 
 ## Chaining
 

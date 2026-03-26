@@ -156,3 +156,8 @@ Create `docs/retros/` directory if it doesn't exist.
 
 After writing the retro:
 > "Retro written to `docs/retros/<filename>.md`. Action item for next week: [one sentence summary]."
+
+**What to do with the action item:**
+- If it's a code change or feature → run `/think` to spec it out before building.
+- If it's a process change → update the relevant skill or add a note to `docs/workflow.md`.
+- If it's a bug discovered in the retro → open an issue or run `/build` directly if the fix is clear and small.
