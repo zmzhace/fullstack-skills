@@ -7,6 +7,54 @@ description: "Implements the plan using strict TDD. Hard gate: no application lo
 
 Implement the plan task by task. Red → Green → Refactor → Commit.
 
+## Process Flow
+
+```dot
+digraph build {
+    rankdir=TB;
+    start   [label="Load plan", shape=doublecircle];
+    resume  [label="Resume check:\nmark completed tasks [done]", shape=box];
+    task    [label="Next incomplete task", shape=box];
+    red     [label="RED: Write failing test", shape=box, style=filled, fillcolor="#ffcccc"];
+    run1    [label="Run test", shape=box];
+    fails   [label="Fails with\nmeaningful error?", shape=diamond];
+    fixtest [label="Fix test\n(wrong failure = wrong test)", shape=box];
+    green   [label="GREEN: Write minimal impl", shape=box, style=filled, fillcolor="#ccffcc"];
+    run2    [label="Run full suite", shape=box];
+    allpass [label="All green?", shape=diamond];
+    fiximpl [label="Fix implementation", shape=box];
+    refact  [label="REFACTOR: Clean up", shape=box, style=filled, fillcolor="#cce0ff"];
+    run3    [label="Run full suite again", shape=box];
+    stillg  [label="Still green?", shape=diamond];
+    undo    [label="Undo refactor\ntry smaller", shape=box];
+    commit  [label="Commit", shape=box];
+    more    [label="More tasks?", shape=diamond];
+    done    [label="Tell user: run /review", shape=doublecircle];
+
+    start -> resume;
+    resume -> task;
+    task -> red;
+    red -> run1;
+    run1 -> fails;
+    fails -> fixtest [label="no / passes immediately"];
+    fixtest -> red;
+    fails -> green [label="yes"];
+    green -> run2;
+    run2 -> allpass;
+    allpass -> fixImpl [label="no"];
+    fixImpl -> run2;
+    allpass -> refact [label="yes"];
+    refact -> run3;
+    run3 -> stillg;
+    stillg -> undo [label="no"];
+    undo -> run3;
+    stillg -> commit [label="yes"];
+    commit -> more;
+    more -> task [label="yes"];
+    more -> done [label="no"];
+}
+```
+
 ## Starting Check
 
 Look for the latest plan in `docs/plans/` using this resolution order:
@@ -16,15 +64,22 @@ Look for the latest plan in `docs/plans/` using this resolution order:
 
 **Resuming a partial build:** Before starting, scan each task in the plan and check if its files already exist and its acceptance criteria are met. List completed tasks as `[done]` and begin from the first incomplete task. Do not re-implement tasks that already pass.
 
-## The Hard Gate
+## The Iron Law
 
-**No application logic or business rule implementation without a failing test first.**
+```
+NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST
+```
+
+If you wrote implementation code before a failing test:
+- **Delete it.** Not "keep as reference." Delete it.
+- Start over with the test.
+- No exceptions. Not even for "obvious" code.
 
 This applies to: functions, classes, API handlers, data transformations, validation logic, business rules.
 
 This does NOT apply to: database migrations, environment config files, generated code, infrastructure definitions, CSS/styling. For these, document what you changed and why in a comment.
 
-If you find yourself writing implementation without a failing test — stop. Write the test first.
+Thinking "skip TDD just this once"? That's rationalization. Stop.
 
 ## The TDD Loop
 

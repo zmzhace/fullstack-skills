@@ -11,6 +11,41 @@ Challenge the problem framing before writing a single line of code. Extract the 
 Do NOT write any code, create any files (except the spec), or take any implementation action during this skill. The only output is a design doc.
 </HARD-GATE>
 
+## Process Flow
+
+```dot
+digraph think {
+    rankdir=TB;
+    start         [label="Invoke /think", shape=doublecircle];
+    questions     [label="Present six questions", shape=box];
+    answers       [label="User answers", shape=box];
+    complete      [label="Answers\ncomplete?", shape=diamond];
+    followup      [label="Follow up on\nvague answers", shape=box];
+    reframe       [label="Reframe if needed\nPropose 2-3 approaches", shape=box];
+    approve       [label="User approves\nframing?", shape=diamond];
+    write         [label="Write spec file", shape=box];
+    selfrev       [label="Spec self-review", shape=box];
+    issues        [label="Issues\nfound?", shape=diamond];
+    fix           [label="Fix inline", shape=box];
+    done          [label="Tell user: run /plan", shape=doublecircle];
+
+    start -> questions;
+    questions -> answers;
+    answers -> complete;
+    complete -> followup [label="vague / conflicting"];
+    complete -> reframe [label="clear"];
+    followup -> answers;
+    reframe -> approve;
+    approve -> reframe [label="no, revise"];
+    approve -> write [label="yes"];
+    write -> selfrev;
+    selfrev -> issues;
+    issues -> fix [label="yes"];
+    fix -> selfrev;
+    issues -> done [label="no"];
+}
+```
+
 ## When to Use
 
 Invoke `/think` whenever:
@@ -83,7 +118,21 @@ Date: YYYY-MM-DD
 [Unresolved decisions that /plan must address]
 ```
 
+## Spec Self-Review
+
+After writing the spec, review it yourself before telling the user to proceed. This is a checklist you run inline — not a separate conversation turn.
+
+**1. Placeholder scan** — search for TBD, TODO, "fill in", "TBD by", "to be determined". Fix every one. If you genuinely don't know, write it as an Open Question.
+
+**2. Contradiction check** — does the Solution conflict with Out of Scope? Does the Approach conflict with Technical Constraints? Fix any contradictions.
+
+**3. Scope realism** — given the Approach and Technical Constraints, is the Success Criteria achievable? If not, narrow the wedge or flag it as an Open Question.
+
+**4. Open Questions audit** — are the listed Open Questions actually open? If you can answer them from what the user told you, answer them now rather than deferring to `/plan`.
+
+Fix issues inline. No need to re-review after fixing — just correct and move on.
+
 ## Chaining
 
-After writing the spec, tell the user:
+After writing and self-reviewing the spec, tell the user:
 > "Spec written to `docs/specs/<filename>.md`. Run `/plan` to turn this into an architecture and implementation plan."

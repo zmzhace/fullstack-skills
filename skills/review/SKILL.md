@@ -7,6 +7,31 @@ description: "Three-pass code review: production bugs (Staff Engineer), security
 
 Three passes: production bugs, security threats, plan compliance. Present findings; let the user decide.
 
+## Process Flow
+
+```dot
+digraph review {
+    rankdir=TB;
+    start   [label="Load latest plan", shape=doublecircle];
+    found   [label="Plan found?", shape=diamond];
+    warn    [label="Warn: skip Pass 3", shape=box];
+    p1      [label="Pass 1: Production Bugs\n(Staff Engineer)", shape=box];
+    p2      [label="Pass 2: Security\n(OWASP + STRIDE)", shape=box];
+    p3      [label="Pass 3: Plan Compliance", shape=box];
+    report  [label="Output Review Report", shape=box];
+    done    [label="Tell user: run /ship", shape=doublecircle];
+
+    start -> found;
+    found -> p1 [label="yes"];
+    found -> warn [label="no"];
+    warn -> p1;
+    p1 -> p2;
+    p2 -> p3;
+    p3 -> report;
+    report -> done;
+}
+```
+
 ## Starting Check
 
 Look for the latest plan in `docs/plans/` (sort `YYYY-MM-DD-*.md` by filename descending) for the plan compliance pass.

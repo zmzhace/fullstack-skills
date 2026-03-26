@@ -7,6 +7,46 @@ description: "Verified release: runs full test suite, checks coverage, syncs mai
 
 No assertions without evidence. Show the output, then ship.
 
+## Process Flow
+
+```dot
+digraph ship {
+    rankdir=TB;
+    start   [label="Pre-flight check", shape=doublecircle];
+    branch  [label="On main/master?", shape=diamond];
+    stop    [label="STOP:\ncreate feature branch first", shape=box];
+    step1   [label="Step 1: Run full test suite", shape=box];
+    pass    [label="All tests pass?", shape=diamond];
+    fix     [label="Fix failures", shape=box];
+    step2   [label="Step 2: Check coverage", shape=box];
+    thresh  [label="Meets threshold?", shape=diamond];
+    over    [label="OVERRIDE or\n--skip-coverage?", shape=diamond];
+    step3   [label="Step 3: Sync with main", shape=box];
+    conf    [label="Conflicts?", shape=diamond];
+    resolve [label="Resolve conflicts\nreturn to Step 1", shape=box];
+    step4   [label="Step 4: Push + Open PR", shape=box];
+    step5   [label="Step 5: Confirm\n(show PR URL + stats)", shape=doublecircle];
+
+    start -> branch;
+    branch -> stop [label="yes"];
+    branch -> step1 [label="no"];
+    step1 -> pass;
+    pass -> fix [label="no"];
+    fix -> step1;
+    pass -> step2 [label="yes"];
+    step2 -> thresh;
+    thresh -> step3 [label="yes"];
+    thresh -> over [label="no"];
+    over -> step3 [label="yes / --skip-coverage"];
+    over -> step2 [label="no, fix coverage"];
+    step3 -> conf;
+    conf -> resolve [label="yes"];
+    resolve -> step1;
+    conf -> step4 [label="no"];
+    step4 -> step5;
+}
+```
+
 ## Pre-Flight Check
 
 Before anything else, check the current branch:
@@ -20,7 +60,7 @@ Cannot open a PR without showing actual passing test terminal output. If tests f
 
 ## Step 1: Run the Full Test Suite
 
-Run the complete test suite using the same test runner discovery order as `/review` (package.json → Makefile → pyproject.toml → pytest.ini). Show the actual terminal output in full — do not summarize, paraphrase, or infer.
+Run the complete test suite using the same test runner discovery order as `/review` (package.json → Makefile → pyproject.toml → pytest.ini → go.mod → Cargo.toml → build.gradle/pom.xml). Show the actual terminal output in full — do not summarize, paraphrase, or infer.
 
 If any test fails:
 > "Tests are failing. Fix the failures before shipping."
