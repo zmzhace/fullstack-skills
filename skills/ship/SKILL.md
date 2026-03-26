@@ -24,8 +24,12 @@ digraph ship {
     step3   [label="Step 3: Sync with main", shape=box];
     conf    [label="Conflicts?", shape=diamond];
     resolve [label="Resolve conflicts\nreturn to Step 1", shape=box];
-    step4   [label="Step 4: Push + Open PR", shape=box];
-    step5   [label="Step 5: Confirm\n(show PR URL + stats)", shape=doublecircle];
+    choose  [label="Step 4: Choose\nintegration option", shape=diamond];
+    pr      [label="A: Push + Open PR", shape=box];
+    merge   [label="B: Merge locally\ninto main", shape=box];
+    keep    [label="C: Keep branch\nas-is", shape=box];
+    discard [label="D: Discard\n(confirm first)", shape=box];
+    step5   [label="Step 5: Confirm\n(show result)", shape=doublecircle];
 
     start -> branch;
     branch -> stop [label="yes"];
@@ -42,8 +46,15 @@ digraph ship {
     step3 -> conf;
     conf -> resolve [label="yes"];
     resolve -> step1;
-    conf -> step4 [label="no"];
-    step4 -> step5;
+    conf -> choose [label="no"];
+    choose -> pr [label="A: open PR"];
+    choose -> merge [label="B: merge local"];
+    choose -> keep [label="C: keep branch"];
+    choose -> discard [label="D: discard"];
+    pr -> step5;
+    merge -> step5;
+    keep -> step5;
+    discard -> step5;
 }
 ```
 
@@ -102,7 +113,20 @@ Check `git log --oneline origin/main..HEAD` first. If the branch has already bee
 
 If conflicts exist: resolve them, then return to Step 1 (re-run the full test suite after rebasing/merging).
 
-## Step 4: Push and Open PR
+## Step 4: Choose Integration Option
+
+After syncing cleanly with main, present the user with four options. Do not assume — always ask.
+
+> "Tests pass. Branch is synced. How do you want to integrate?
+>
+> **A** — Open PR (push branch, open pull request for review)
+> **B** — Merge locally (merge into main now, delete branch)
+> **C** — Keep branch (stop here, come back later)
+> **D** — Discard (delete branch and all changes)"
+
+Wait for an explicit choice. Then execute:
+
+### Option A: Open PR
 
 ```bash
 git push origin <current-branch-name>
@@ -127,12 +151,44 @@ Open a PR with this description structure:
 2. [expected result at each step]
 ```
 
+### Option B: Merge Locally
+
+```bash
+git checkout main
+git merge --no-ff <branch-name>   # or: git merge --squash for a clean single commit
+git push origin main
+git branch -d <branch-name>
+```
+
+Re-run the test suite after merging to confirm nothing broke.
+
+### Option C: Keep Branch
+
+Do nothing. Confirm:
+> "Branch `<name>` is clean, synced, and ready. No action taken. Resume with `/build` or `/ship` when ready."
+
+### Option D: Discard
+
+<HARD-GATE>
+Before deleting, require the user to type the branch name exactly to confirm:
+> "Type the branch name to confirm discard: `<branch-name>`"
+Do NOT delete until the exact name is typed back.
+</HARD-GATE>
+
+```bash
+git checkout main
+git branch -D <branch-name>
+```
+
+> "Branch `<name>` deleted. All changes discarded."
+
 ## Step 5: Confirm
 
-Show the PR URL and state:
-> "Shipped. PR: [URL]
-> Tests: [N passing]. Coverage: X%."
+Report the outcome clearly:
 
-Only say "Shipped" after you have shown:
-1. The passing test output from Step 1
-2. The PR URL from Step 4
+- **After A:** "Shipped. PR: [URL] — Tests: [N passing]. Coverage: X%."
+- **After B:** "Merged into main. Tests: [N passing]. Branch deleted."
+- **After C:** "Branch kept. Nothing merged."
+- **After D:** "Branch discarded."
+
+Only say "Shipped" (options A or B) after you have shown the passing test output from Step 1.

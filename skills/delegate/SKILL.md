@@ -25,6 +25,27 @@ Every subagent has a role. A role definition gives the agent a precise identity:
 
 **How to inject a role:** Read the role file, prepend its full content to the subagent prompt, add `---` as a separator, then add task-specific context. See the prompt templates below.
 
+## Model Selection
+
+Use the least capable model that can do the job. Cheaper models complete mechanical tasks faster and preserve budget for the tasks that actually need reasoning.
+
+| Role | Recommended model | Reason |
+|------|------------------|--------|
+| Implementer | `haiku` | Mechanical TDD cycle — test + implement + commit. Follows a procedure, not reasoning under uncertainty. |
+| Spec Reviewer | `haiku` | Pattern matching — spec text vs. implementation. Binary output. |
+| Quality Reviewer | `sonnet` | Judgment calls — assessing production risk, classifying severity. |
+| Debugger | `sonnet` | Reasoning-intensive — tracing root cause across a call stack. |
+| Final review / complex architecture | `opus` | When the problem spans many files and requires deep reasoning. |
+
+**To specify model when dispatching via Agent tool:**
+```
+model: "haiku"   → claude-haiku-4-5-20251001
+model: "sonnet"  → claude-sonnet-4-6
+model: "opus"    → claude-opus-4-6
+```
+
+When in doubt: start with `haiku`, upgrade to `sonnet` if the subagent reports `NEEDS_CONTEXT` or produces shallow output.
+
 ## When to Use Which Mode
 
 ```dot
