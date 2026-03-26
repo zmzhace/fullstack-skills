@@ -1,0 +1,1 @@
+I have a spec ready at docs/specs/2026-03-26-notifications.md. Turn it into an implementation plan.

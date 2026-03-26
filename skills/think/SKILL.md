@@ -53,6 +53,33 @@ Invoke `/think` whenever:
 - You have an idea but haven't defined the problem clearly
 - You're about to ask for `/plan` but have no spec yet
 
+## Visual Companion
+
+Before asking clarifying questions, assess whether the topic involves visual content:
+
+**Offer visual companion when the topic includes:**
+- UI layouts, navigation structures, component designs
+- System architecture or data flow with many components
+- Side-by-side design comparisons
+- State machines or entity relationships
+
+**Stay in text when:**
+- Requirements and scope questions
+- Picking between approaches described in words
+- Tradeoffs, pros/cons lists
+- Technical decisions (API design, data modeling)
+
+If offering: make it a separate message, not bundled with a clarifying question.
+
+```
+"This looks like it will involve layout decisions. Would you like me to sketch wireframes
+as ASCII diagrams alongside the questions? It can help clarify what you're picturing."
+```
+
+For architecture topics, the Graphviz flow diagrams embedded in the spec (and in our skills) serve as the visual companion — render them with any Graphviz-compatible viewer.
+
+---
+
 ## The Six Forcing Questions
 
 Present all six questions at once so the user can answer in a single pass. If the user provided context when invoking `/think` (e.g., `/think I want rate limiting because bots scraped us 50k times`), mark questions already answered by that context and only ask the remaining ones.

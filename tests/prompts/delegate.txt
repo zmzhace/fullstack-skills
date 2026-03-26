@@ -1,0 +1,1 @@
+I have a plan with 8 tasks for a new feature. The tasks are mostly independent. Run them using subagents.

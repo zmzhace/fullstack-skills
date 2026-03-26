@@ -1,0 +1,1 @@
+I got a PR review. The reviewer says: "This is using the wrong Redis command for atomic operations. You should be using MULTI/EXEC instead of separate INCR and EXPIRE calls." How should I handle this?

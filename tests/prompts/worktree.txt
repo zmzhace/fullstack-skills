@@ -1,0 +1,1 @@
+I'm about to start implementing a new auth feature. Set up an isolated workspace for it.

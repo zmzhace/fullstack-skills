@@ -1,0 +1,1 @@
+The plan is ready at docs/plans/2026-03-26-notifications.md. Start implementing.

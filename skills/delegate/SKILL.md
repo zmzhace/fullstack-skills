@@ -7,8 +7,9 @@ description: "Use when executing a plan task-by-task with isolated agents, or di
 
 You delegate tasks to agents with precisely crafted, isolated context. They never inherit your session history — you construct exactly what they need. This keeps each agent focused and preserves your context for coordination.
 
-**Two modes:**
+**Three modes:**
 - **Sequential** — Execute a plan task by task. Fresh subagent per task + two-stage review (spec compliance → code quality) after each.
+- **Inline** — Execute a plan directly in this session, batch by batch, with a checkpoint after each batch. Simpler, no subagent overhead.
 - **Parallel** — Dispatch multiple agents concurrently for independent problems.
 
 ## When to Use Which Mode
@@ -16,17 +17,21 @@ You delegate tasks to agents with precisely crafted, isolated context. They neve
 ```dot
 digraph mode_select {
     start   [label="What's the task?", shape=doublecircle];
-    plan    [label="Executing a\nimplementation plan?", shape=diamond];
+    plan    [label="Executing an\nimplementation plan?", shape=diamond];
     indep   [label="Multiple independent\nfailures/problems?", shape=diamond];
-    seq     [label="Sequential mode\n(one subagent per task)", shape=box, style=filled, fillcolor="#cce0ff"];
+    qual    [label="Need maximum\nquality gates?", shape=diamond];
+    seq     [label="Sequential mode\n(subagent per task)", shape=box, style=filled, fillcolor="#cce0ff"];
+    inline  [label="Inline mode\n(current session, checkpoints)", shape=box, style=filled, fillcolor="#fffacc"];
     par     [label="Parallel mode\n(concurrent agents)", shape=box, style=filled, fillcolor="#ccffcc"];
-    inline  [label="Inline /build\n(no subagents needed)", shape=box];
+    build   [label="Just run /build\n(single task, no plan)", shape=box];
 
     start -> plan;
-    plan -> seq [label="yes"];
+    plan -> qual [label="yes"];
+    qual -> seq [label="yes, review gates\nafter every task"];
+    qual -> inline [label="no, checkpoints\nare enough"];
     plan -> indep [label="no"];
-    indep -> par [label="yes, they're independent"];
-    indep -> inline [label="no, they're related"];
+    indep -> par [label="yes, independent"];
+    indep -> build [label="no, single task"];
 }
 ```
 
@@ -155,6 +160,64 @@ Do NOT check spec compliance — that was already verified.
 | `BLOCKED` | Assess: context problem → provide more + re-dispatch. Task too large → split. Plan wrong → escalate to user. |
 
 **Never** ignore an escalation or re-dispatch the same subagent with no changes.
+
+---
+
+## Inline Mode — Direct Session Execution
+
+Execute the plan in the current session. No subagent overhead. Uses checkpoints after each batch so you can review progress without losing context.
+
+**Use when:** Plan is well-specified, tasks are mostly sequential, and you don't need per-task review gates.
+
+### Process Flow
+
+```dot
+digraph inline {
+    rankdir=TB;
+    load    [label="Load plan\nRaise concerns before starting", shape=box];
+    batch   [label="Execute next batch\n(1-3 related tasks)", shape=box];
+    test    [label="Run test suite", shape=box];
+    pass    [label="All green?", shape=diamond];
+    debug   [label="Run /debug\nfix before continuing", shape=box];
+    check   [label="Checkpoint:\nsummarize progress", shape=box];
+    more    [label="More tasks?", shape=diamond];
+    done    [label="Run /review then /ship", shape=doublecircle];
+
+    load -> batch;
+    batch -> test;
+    test -> pass;
+    pass -> debug [label="no"];
+    debug -> test;
+    pass -> check [label="yes"];
+    check -> more;
+    more -> batch [label="yes"];
+    more -> done [label="no"];
+}
+```
+
+### Steps
+
+**1. Load and review the plan**
+Read the full plan. If anything is unclear or contradictory, raise it before starting — not mid-execution.
+
+**2. Execute in batches**
+Group 1-3 related tasks per batch. For each task, follow the TDD loop from `/build` (failing test → minimal impl → refactor → commit). Do not skip the commit.
+
+**3. Run the full test suite after each batch**
+If any test fails, stop immediately. Run `/debug` to find root cause before continuing. Do not bundle bug fixes into the next batch.
+
+**4. Checkpoint**
+After each batch, summarize:
+```
+Batch N complete:
+- Tasks done: [list]
+- Tests: N passing
+- Remaining: [list]
+- Any concerns: [or "none"]
+```
+
+**5. Stop when blocked**
+If a task has a missing dependency, unclear instruction, or failing test that can't be explained — stop and ask. Do not guess or push through.
 
 ---
 

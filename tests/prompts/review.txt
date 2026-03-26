@@ -1,0 +1,1 @@
+I've finished implementing the notification feature. Please review the code before I ship.

@@ -1,0 +1,1 @@
+I think I fixed the race condition in the notification queue. Can I claim it's done now?
