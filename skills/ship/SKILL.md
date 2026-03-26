@@ -14,15 +14,13 @@ Before anything else, check the current branch:
   > "You're on `main`. Create a feature branch first: `git checkout -b feat/<name>`. Then re-run `/ship`."
 - If the branch has no commits ahead of main: warn and confirm before proceeding.
 
-## The Hard Gate
-
-**Cannot open a PR without showing actual passing test terminal output.**
-
-If tests fail: fix them. Come back. Do not open a PR with failing tests under any circumstances.
+<HARD-GATE>
+Cannot open a PR without showing actual passing test terminal output. If tests fail: fix them. Come back. Do not open a PR with failing tests under any circumstances.
+</HARD-GATE>
 
 ## Step 1: Run the Full Test Suite
 
-Run the complete test suite. Show the actual terminal output in full — do not summarize, paraphrase, or infer.
+Run the complete test suite using the same test runner discovery order as `/review` (package.json → Makefile → pyproject.toml → pytest.ini). Show the actual terminal output in full — do not summarize, paraphrase, or infer.
 
 If any test fails:
 > "Tests are failing. Fix the failures before shipping."
@@ -48,16 +46,21 @@ If coverage is below threshold:
 > "Coverage is X% — below the Y% threshold.
 > Respond with OVERRIDE to proceed anyway, or re-run as `/ship --skip-coverage`."
 
+If `--skip-coverage` was passed by the user when invoking this skill: skip this step entirely and proceed to Step 3.
+
 Wait for explicit response. Do not proceed without it.
 
 ## Step 3: Sync with Main
 
 ```bash
 git fetch origin
-git merge origin/main
+git rebase origin/main   # preferred — keeps history linear
+# or: git merge origin/main — if the repo convention uses merge commits
 ```
 
-If merge conflicts exist: resolve them, then return to Step 1 (re-run the full test suite after merging).
+Check `git log --oneline origin/main..HEAD` first. If the branch has already been rebased and is clean, skip this step.
+
+If conflicts exist: resolve them, then return to Step 1 (re-run the full test suite after rebasing/merging).
 
 ## Step 4: Push and Open PR
 

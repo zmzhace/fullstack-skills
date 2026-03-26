@@ -14,6 +14,8 @@ Look for the latest plan in `docs/plans/` using this resolution order:
 2. If multiple files share the same date, ask the user to select
 3. If no files match the pattern, prompt: "No plan found. Run `/plan` first, provide a path, or describe the tasks inline to continue without a plan."
 
+**Resuming a partial build:** Before starting, scan each task in the plan and check if its files already exist and its acceptance criteria are met. List completed tasks as `[done]` and begin from the first incomplete task. Do not re-implement tasks that already pass.
+
 ## The Hard Gate
 
 **No application logic or business rule implementation without a failing test first.**

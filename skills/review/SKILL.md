@@ -40,6 +40,7 @@ If you cannot fill in all three fields with specifics, do not report the finding
 *API / Backend:*
 - Injection (SQL, command, LDAP, template)
 - Broken authentication / session management
+- Server-Side Request Forgery (SSRF) if URLs or remote resources are fetched
 - Broken access control (can User A access User B's data?)
 - Insecure deserialization
 - Insufficient logging (are auth failures, access denials, and errors logged?)
@@ -92,7 +93,7 @@ All findings are **ASK** or **INFO**. Do not auto-fix any code — even mechanic
 - Potential dead code
 - Scope creep (code with no corresponding plan task)
 
-**Test runner discovery order** (stop at first match):
+**Test runner discovery order** (stop at first match — same logic used in `/ship`):
 1. `package.json` → use `scripts.test`
 2. `Makefile` → look for `test` target
 3. `pyproject.toml` / `pytest.ini` → run `pytest`

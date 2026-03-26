@@ -50,6 +50,8 @@ Get explicit user approval: "Does this framing match what you're building? Shall
 After approval, write the design doc to `docs/specs/YYYY-MM-DD-<topic>.md`.
 Create the `docs/specs/` directory if it doesn't exist.
 
+If a file at that path already exists: append `-2` (or the next available suffix) rather than overwriting.
+
 Structure:
 
 ```markdown
