@@ -1,5 +1,5 @@
 ---
-name: document-release
+name: sync
 description: "After shipping, updates all docs to match what was just released: README, API docs, CHANGELOG, and any guides that reference changed behavior. Run after /ship."
 ---
 

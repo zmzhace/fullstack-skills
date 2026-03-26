@@ -1,5 +1,5 @@
 ---
-name: receive-review
+name: respond
 description: "Use when receiving code review feedback. Verify before implementing. Push back when technically wrong. No performative agreement. Evidence and technical rigor over social comfort."
 ---
 

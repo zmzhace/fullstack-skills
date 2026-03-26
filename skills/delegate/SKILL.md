@@ -1,5 +1,5 @@
 ---
-name: subagent
+name: delegate
 description: "Use when executing a plan task-by-task with isolated agents, or dispatching multiple agents in parallel for independent problems. Two modes: sequential (one subagent per task + two-stage review) and parallel (concurrent agents for unrelated failures)."
 ---
 
