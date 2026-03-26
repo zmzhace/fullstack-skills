@@ -1,6 +1,6 @@
 ---
-name: sync
-description: "After shipping, updates all docs to match what was just released: README, API docs, CHANGELOG, and any guides that reference changed behavior. Run after /ship."
+name: forge-sync
+description: "After shipping, updates all docs to match what was just released: README, API docs, CHANGELOG, and any guides that reference changed behavior. Run after /forge-ship."
 ---
 
 # Document Release — Keep Docs in Sync
@@ -109,7 +109,7 @@ Always update. Follow the existing format of the file. If no CHANGELOG exists, c
 - [bug fixes]
 ```
 
-Move `[Unreleased]` entries to a versioned section if a version tag was created during `/ship`.
+Move `[Unreleased]` entries to a versioned section if a version tag was created during `/forge-ship`.
 
 ### Guides and Tutorials
 Update step-by-step instructions that walk through changed workflows. Do not rewrite guides wholesale — find the specific steps that reference changed behavior and update them in place.
@@ -139,4 +139,4 @@ Do not bundle doc changes with code changes in the same commit.
 ## Chaining
 
 After committing:
-> "Documentation updated. Changed files: [list]. Run `/retro` if you want a weekly shipping summary."
+> "Documentation updated. Changed files: [list]. Run `/forge-retro` if you want a weekly shipping summary."

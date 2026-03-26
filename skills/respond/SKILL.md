@@ -1,5 +1,5 @@
 ---
-name: respond
+name: forge-respond
 description: "Use when receiving code review feedback. Verify before implementing. Push back when technically wrong. No performative agreement. Evidence and technical rigor over social comfort."
 ---
 
@@ -193,4 +193,4 @@ gh api repos/{owner}/{repo}/pulls/{pr}/comments/{comment_id}/replies \
 ## Chaining
 
 After implementing all review items:
-> "Review addressed. Changes: [list]. Run `/verify` to confirm everything passes before marking the review resolved."
+> "Review addressed. Changes: [list]. Run `/forge-verify` to confirm everything passes before marking the review resolved."

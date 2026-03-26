@@ -1,5 +1,5 @@
 ---
-name: delegate
+name: forge-delegate
 description: "Use when executing a plan task-by-task with isolated agents, or dispatching multiple agents in parallel for independent problems. Two modes: sequential (one subagent per task + two-stage review) and parallel (concurrent agents for unrelated failures)."
 ---
 
@@ -57,7 +57,7 @@ digraph mode_select {
     seq     [label="Sequential mode\n(subagent per task)", shape=box, style=filled, fillcolor="#cce0ff"];
     inline  [label="Inline mode\n(current session, checkpoints)", shape=box, style=filled, fillcolor="#fffacc"];
     par     [label="Parallel mode\n(concurrent agents)", shape=box, style=filled, fillcolor="#ccffcc"];
-    build   [label="Just run /build\n(single task, no plan)", shape=box];
+    build   [label="Just run /forge-build\n(single task, no plan)", shape=box];
 
     start -> plan;
     plan -> qual [label="yes"];
@@ -97,7 +97,7 @@ digraph sequential {
     done1   [label="Mark task complete", shape=box];
     more    [label="More tasks?", shape=diamond];
     final   [label="Final review of\nentire implementation", shape=box];
-    ship    [label="Run /ship", shape=doublecircle];
+    ship    [label="Run /forge-ship", shape=doublecircle];
 
     read -> task;
     task -> impl;
@@ -231,10 +231,10 @@ digraph inline {
     batch   [label="Execute next batch\n(1-3 related tasks)", shape=box];
     test    [label="Run test suite", shape=box];
     pass    [label="All green?", shape=diamond];
-    debug   [label="Run /debug\nfix before continuing", shape=box];
+    debug   [label="Run /forge-debug\nfix before continuing", shape=box];
     check   [label="Checkpoint:\nsummarize progress", shape=box];
     more    [label="More tasks?", shape=diamond];
-    done    [label="Run /review then /ship", shape=doublecircle];
+    done    [label="Run /forge-review then /forge-ship", shape=doublecircle];
 
     load -> batch;
     batch -> test;
@@ -254,10 +254,10 @@ digraph inline {
 Read the full plan. If anything is unclear or contradictory, raise it before starting — not mid-execution.
 
 **2. Execute in batches**
-Group 1-3 related tasks per batch. For each task, follow the TDD loop from `/build` (failing test → minimal impl → refactor → commit). Do not skip the commit.
+Group 1-3 related tasks per batch. For each task, follow the TDD loop from `/forge-build` (failing test → minimal impl → refactor → commit). Do not skip the commit.
 
 **3. Run the full test suite after each batch**
-If any test fails, stop immediately. Run `/debug` to find root cause before continuing. Do not bundle bug fixes into the next batch.
+If any test fails, stop immediately. Run `/forge-debug` to find root cause before continuing. Do not bundle bug fixes into the next batch.
 
 **4. Checkpoint**
 After each batch, summarize:
@@ -358,4 +358,4 @@ Your scope: ONLY [this file / this subsystem]. Do not change other code.
 ## Chaining
 
 After all tasks complete (sequential) or all agents return (parallel):
-> "All tasks complete. Run `/review` for the full three-pass quality gate, then `/ship`."
+> "All tasks complete. Run `/forge-review` for the full three-pass quality gate, then `/forge-ship`."

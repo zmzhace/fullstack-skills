@@ -1,5 +1,5 @@
 ---
-name: review
+name: forge-review
 description: "Three-pass code review: production bugs (Staff Engineer), security threats (OWASP+STRIDE), and plan compliance. All findings require human approval."
 ---
 
@@ -19,7 +19,7 @@ digraph review {
     p2      [label="Pass 2: Security\n(OWASP + STRIDE)", shape=box];
     p3      [label="Pass 3: Plan Compliance", shape=box];
     report  [label="Output Review Report", shape=box];
-    done    [label="Tell user: run /ship", shape=doublecircle];
+    done    [label="Tell user: run /forge-ship", shape=doublecircle];
 
     start -> found;
     found -> p1 [label="yes"];
@@ -118,7 +118,7 @@ All findings are **ASK** or **INFO**. Do not auto-fix any code — even mechanic
 - Potential dead code
 - Scope creep (code with no corresponding plan task)
 
-**Test runner discovery order** (stop at first match — same logic used in `/ship`):
+**Test runner discovery order** (stop at first match — same logic used in `/forge-ship`):
 1. `package.json` → use `scripts.test`
 2. `Makefile` → look for `test` target
 3. `pyproject.toml` / `pytest.ini` → run `pytest`
@@ -148,10 +148,10 @@ INFO: [code with no corresponding plan task — possible scope creep]
 ## Chaining
 
 After delivering the report:
-> "Review complete. Address the ASK items above. When resolved, run `/ship` to verify and push."
+> "Review complete. Address the ASK items above. When resolved, run `/forge-ship` to verify and push."
 
 **How to address ASK items:**
-- **Logic / behavior change** → edit the code, then re-run the test suite to confirm no regression. No need to re-run `/review` for a targeted fix — only re-run if the fix touches multiple files or changes an interface.
+- **Logic / behavior change** → edit the code, then re-run the test suite to confirm no regression. No need to re-run `/forge-review` for a targeted fix — only re-run if the fix touches multiple files or changes an interface.
 - **Security finding** → discuss the recommended fix with the user before changing anything. Security fixes often have non-obvious side effects.
-- **Missing plan task** → implement it using the TDD loop from `/build`, then re-run `/review` Pass 3 only.
-- **If an ASK item requires revisiting the design** → run `/plan` to update the affected tasks, then return to `/build` for those tasks.
+- **Missing plan task** → implement it using the TDD loop from `/forge-build`, then re-run `/forge-review` Pass 3 only.
+- **If an ASK item requires revisiting the design** → run `/forge-plan` to update the affected tasks, then return to `/forge-build` for those tasks.

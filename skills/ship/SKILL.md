@@ -1,5 +1,5 @@
 ---
-name: ship
+name: forge-ship
 description: "Verified release: runs full test suite, checks coverage, syncs main, pushes, opens PR. Hard gate: no PR without passing test terminal output."
 ---
 
@@ -62,7 +62,7 @@ digraph ship {
 
 Before anything else, check the current branch:
 - If on `main` or `master`: **stop immediately**.
-  > "You're on `main`. Create a feature branch first: `git checkout -b feat/<name>`. Then re-run `/ship`."
+  > "You're on `main`. Create a feature branch first: `git checkout -b feat/<name>`. Then re-run `/forge-ship`."
 - If the branch has no commits ahead of main: warn and confirm before proceeding.
 
 <HARD-GATE>
@@ -71,7 +71,7 @@ Cannot open a PR without showing actual passing test terminal output. If tests f
 
 ## Step 1: Run the Full Test Suite
 
-Run the complete test suite using the same test runner discovery order as `/review` (package.json → Makefile → pyproject.toml → pytest.ini → go.mod → Cargo.toml → build.gradle/pom.xml). Show the actual terminal output in full — do not summarize, paraphrase, or infer.
+Run the complete test suite using the same test runner discovery order as `/forge-review` (package.json → Makefile → pyproject.toml → pytest.ini → go.mod → Cargo.toml → build.gradle/pom.xml). Show the actual terminal output in full — do not summarize, paraphrase, or infer.
 
 If any test fails:
 > "Tests are failing. Fix the failures before shipping."
@@ -95,7 +95,7 @@ If coverage meets threshold: proceed.
 
 If coverage is below threshold:
 > "Coverage is X% — below the Y% threshold.
-> Respond with OVERRIDE to proceed anyway, or re-run as `/ship --skip-coverage`."
+> Respond with OVERRIDE to proceed anyway, or re-run as `/forge-ship --skip-coverage`."
 
 If `--skip-coverage` was passed by the user when invoking this skill: skip this step entirely and proceed to Step 3.
 
@@ -165,7 +165,7 @@ Re-run the test suite after merging to confirm nothing broke.
 ### Option C: Keep Branch
 
 Do nothing. Confirm:
-> "Branch `<name>` is clean, synced, and ready. No action taken. Resume with `/build` or `/ship` when ready."
+> "Branch `<name>` is clean, synced, and ready. No action taken. Resume with `/forge-build` or `/forge-ship` when ready."
 
 ### Option D: Discard
 

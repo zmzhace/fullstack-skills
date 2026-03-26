@@ -1,6 +1,6 @@
 ---
-name: think
-description: "Use before starting any feature or change. Challenges problem framing, extracts real user pain, proposes approaches, writes a design doc. Run before /plan."
+name: forge-think
+description: "Use before starting any feature or change. Challenges problem framing, extracts real user pain, proposes approaches, writes a design doc. Run before /forge-plan."
 ---
 
 # Think — Product Thinking
@@ -16,7 +16,7 @@ Do NOT write any code, create any files (except the spec), or take any implement
 ```dot
 digraph think {
     rankdir=TB;
-    start         [label="Invoke /think", shape=doublecircle];
+    start         [label="Invoke /forge-think", shape=doublecircle];
     questions     [label="Present six questions", shape=box];
     answers       [label="User answers", shape=box];
     complete      [label="Answers\ncomplete?", shape=diamond];
@@ -27,7 +27,7 @@ digraph think {
     selfrev       [label="Spec self-review", shape=box];
     issues        [label="Issues\nfound?", shape=diamond];
     fix           [label="Fix inline", shape=box];
-    done          [label="Tell user: run /plan", shape=doublecircle];
+    done          [label="Tell user: run /forge-plan", shape=doublecircle];
 
     start -> questions;
     questions -> answers;
@@ -48,10 +48,10 @@ digraph think {
 
 ## When to Use
 
-Invoke `/think` whenever:
+Invoke `/forge-think` whenever:
 - Starting a new feature or significant change
 - You have an idea but haven't defined the problem clearly
-- You're about to ask for `/plan` but have no spec yet
+- You're about to ask for `/forge-plan` but have no spec yet
 
 ## Visual Companion
 
@@ -82,7 +82,7 @@ For architecture topics, the Graphviz flow diagrams embedded in the spec (and in
 
 ## The Six Forcing Questions
 
-Present all six questions at once so the user can answer in a single pass. If the user provided context when invoking `/think` (e.g., `/think I want rate limiting because bots scraped us 50k times`), mark questions already answered by that context and only ask the remaining ones.
+Present all six questions at once so the user can answer in a single pass. If the user provided context when invoking `/forge-think` (e.g., `/forge-think I want rate limiting because bots scraped us 50k times`), mark questions already answered by that context and only ask the remaining ones.
 
 1. **The Pain Question**: "What specific frustration or failure triggered this idea? Describe the last time this problem hurt you — what happened?"
 2. **The Person Question**: "Who exactly has this pain? Name their role, their context, their frequency of hitting this problem."
@@ -142,7 +142,7 @@ Date: YYYY-MM-DD
 [Measurable outcomes in 30 days]
 
 ## Open Questions
-[Unresolved decisions that /plan must address]
+[Unresolved decisions that /forge-plan must address]
 ```
 
 ## Spec Self-Review
@@ -155,11 +155,11 @@ After writing the spec, review it yourself before telling the user to proceed. T
 
 **3. Scope realism** — given the Approach and Technical Constraints, is the Success Criteria achievable? If not, narrow the wedge or flag it as an Open Question.
 
-**4. Open Questions audit** — are the listed Open Questions actually open? If you can answer them from what the user told you, answer them now rather than deferring to `/plan`.
+**4. Open Questions audit** — are the listed Open Questions actually open? If you can answer them from what the user told you, answer them now rather than deferring to `/forge-plan`.
 
 Fix issues inline. No need to re-review after fixing — just correct and move on.
 
 ## Chaining
 
 After writing and self-reviewing the spec, tell the user:
-> "Spec written to `docs/specs/<filename>.md`. Run `/plan` to turn this into an architecture and implementation plan."
+> "Spec written to `docs/specs/<filename>.md`. Run `/forge-plan` to turn this into an architecture and implementation plan."

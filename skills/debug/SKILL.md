@@ -1,5 +1,5 @@
 ---
-name: debug
+name: forge-debug
 description: "Use when encountering any bug, test failure, or unexpected behavior. Four-phase methodology: root cause → pattern → hypothesis → fix. Hard gate: no fixes without root cause first."
 ---
 
@@ -169,7 +169,7 @@ Trace backward from the failure:
 
 ### 1. Write a Failing Test Case First
 - Write the simplest possible reproduction as an automated test
-- Use the `/build` TDD loop to write it
+- Use the `/forge-build` TDD loop to write it
 - This test must exist before you change any application code
 
 ### 2. Implement a Single Fix
@@ -252,4 +252,4 @@ If systematic investigation reveals the issue is truly environmental, timing-dep
 ## Chaining
 
 After the fix is verified:
-> "Bug fixed. Root cause: [one sentence]. Fix: [what changed]. Run `/review` if the fix touches application logic, or `/verify` before claiming it's done."
+> "Bug fixed. Root cause: [one sentence]. Fix: [what changed]. Run `/forge-review` if the fix touches application logic, or `/forge-verify` before claiming it's done."

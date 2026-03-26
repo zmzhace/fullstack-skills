@@ -1,5 +1,5 @@
 ---
-name: worktree
+name: forge-worktree
 description: "Use before starting feature work or executing an implementation plan. Creates an isolated git worktree so the feature branch is completely separated from your working directory."
 ---
 
@@ -114,7 +114,7 @@ Auto-detect and install dependencies:
 ## Step 5: Baseline the Tests
 
 ```bash
-# Use the same test runner discovery order as /review and /ship
+# Use the same test runner discovery order as /forge-review and /forge-ship
 ```
 
 - Tests pass → report ready
@@ -129,7 +129,7 @@ Worktree ready at: <full-path>
 Branch: <branch-name>
 Tests: N passing, 0 failures
 
-Ready to implement <feature-name>. Run /build (or /delegate) to start.
+Ready to implement <feature-name>. Run /forge-build (or /forge-delegate) to start.
 ```
 
 ## Cleanup
@@ -164,4 +164,4 @@ git branch -D <branch-name>        # if discarding
 ## Chaining
 
 After worktree is ready:
-> "Worktree ready. Run `/build` to implement with TDD, or `/delegate` for parallel task execution."
+> "Worktree ready. Run `/forge-build` to implement with TDD, or `/forge-delegate` for parallel task execution."

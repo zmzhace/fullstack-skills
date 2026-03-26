@@ -8,19 +8,19 @@ TESTS_DIR="$(cd "$(dirname "$0")" && pwd)"
 MODEL="${2:-claude-sonnet-4-6}"
 
 SKILLS=(
-  think
-  plan
-  build
-  review
-  ship
-  sync
-  debug
-  verify
-  respond
-  delegate
-  worktree
-  retro
-  write-skill
+  forge-think
+  forge-plan
+  forge-build
+  forge-review
+  forge-ship
+  forge-sync
+  forge-debug
+  forge-verify
+  forge-respond
+  forge-delegate
+  forge-worktree
+  forge-retro
+  forge-write-skill
 )
 
 PASS=0

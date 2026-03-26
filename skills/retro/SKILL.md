@@ -1,5 +1,5 @@
 ---
-name: retro
+name: forge-retro
 description: "Weekly retrospective: what shipped, what's in-progress, per-contributor breakdown, shipping streak, and one improvement to carry forward. Run at end of week or sprint."
 ---
 
@@ -41,7 +41,7 @@ digraph retro {
 
 Default: last 7 days.
 
-Override: if the user passes a sprint name or explicit date range (e.g., `/retro 2026-03-01..2026-03-14`), use that window instead.
+Override: if the user passes a sprint name or explicit date range (e.g., `/forge-retro 2026-03-01..2026-03-14`), use that window instead.
 
 ```bash
 git log --oneline --since="7 days ago"
@@ -158,6 +158,6 @@ After writing the retro:
 > "Retro written to `docs/retros/<filename>.md`. Action item for next week: [one sentence summary]."
 
 **What to do with the action item:**
-- If it's a code change or feature → run `/think` to spec it out before building.
+- If it's a code change or feature → run `/forge-think` to spec it out before building.
 - If it's a process change → update the relevant skill or add a note to `docs/workflow.md`.
-- If it's a bug discovered in the retro → open an issue or run `/build` directly if the fix is clear and small.
+- If it's a bug discovered in the retro → open an issue or run `/forge-build` directly if the fix is clear and small.

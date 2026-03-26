@@ -5,7 +5,7 @@ A full example of Forge skills in action, from idea to merged PR.
 ## The Core Loop
 
 ```
-/think → /plan → /build → /review → /ship → /sync
+/forge-think → /forge-plan → /forge-build → /forge-review → /forge-ship → /forge-sync
 ```
 
 Each skill produces output that feeds the next. Run them in order for new features. Run any skill individually when you need a specific capability.
@@ -14,20 +14,20 @@ Each skill produces output that feeds the next. Run them in order for new featur
 
 | Need | Skill |
 |------|-------|
-| Hit a bug | `/debug` before any fix |
-| About to claim "done" | `/verify` first |
-| Received PR review | `/respond` to evaluate before implementing |
-| Plan has independent tasks | `/delegate` for parallel execution with review gates |
-| End of week | `/retro` for team summary + one action item |
+| Hit a bug | `/forge-debug` before any fix |
+| About to claim "done" | `/forge-verify` first |
+| Received PR review | `/forge-respond` to evaluate before implementing |
+| Plan has independent tasks | `/forge-delegate` for parallel execution with review gates |
+| End of week | `/forge-retro` for team summary + one action item |
 
 ---
 
 ## Example: Adding Rate Limiting to an API
 
-### /think
+### /forge-think
 
 ```
-You: /think
+You: /forge-think
      I want to add rate limiting to my API
 ```
 
@@ -49,10 +49,10 @@ Self-review runs automatically: checks for placeholders, contradictions, scope i
 
 ---
 
-### /plan
+### /forge-plan
 
 ```
-You: /plan
+You: /forge-plan
 ```
 
 Reads the spec. Produces:
@@ -75,10 +75,10 @@ Plan written to `docs/plans/2026-03-23-rate-limiting.md`.
 
 ---
 
-### /build
+### /forge-build
 
 ```
-You: /build
+You: /forge-build
 ```
 
 Reads the plan. For Task 1 (Redis counter):
@@ -96,10 +96,10 @@ Repeats for all 4 tasks.
 
 ---
 
-### /debug (if something breaks during /build)
+### /forge-debug (if something breaks during /forge-build)
 
 ```
-You: /debug
+You: /forge-debug
      test_concurrent_requests is flaky — passes sometimes, fails others
 ```
 
@@ -113,10 +113,10 @@ Phase 4 — Writes failing test for the race condition, applies single fix, veri
 
 ---
 
-### /verify
+### /forge-verify
 
 ```
-You: /verify
+You: /forge-verify
 ```
 
 Before claiming Task 2 complete:
@@ -129,10 +129,10 @@ No "should work now." Evidence only.
 
 ---
 
-### /review
+### /forge-review
 
 ```
-You: /review
+You: /forge-review
 ```
 
 **Pass 1 (Production Bugs):**
@@ -149,13 +149,13 @@ You approve both ASK fixes. Applied. Tests re-run — green.
 
 ---
 
-### /respond (if you receive PR feedback after /ship)
+### /forge-respond (if you receive PR feedback after /forge-ship)
 
 ```
 Reviewer: "The Redis key format should use : not . as separator — industry standard"
 ```
 
-`/respond` evaluates:
+`/forge-respond` evaluates:
 - Checks codebase: existing keys use `.` consistently everywhere else
 - Not a bug, just a style preference
 - Counter: "Our existing keys use `.` for consistency. The `:` convention is common but not universal. Open to changing if the team wants to standardize — but it's not wrong as-is."
@@ -164,10 +164,10 @@ No performative "you're absolutely right!" — technical evaluation first.
 
 ---
 
-### /ship
+### /forge-ship
 
 ```
-You: /ship
+You: /forge-ship
 ```
 
 1. Pre-flight check — confirms not on main branch ✓
@@ -179,10 +179,10 @@ You: /ship
 
 ---
 
-### /sync
+### /forge-sync
 
 ```
-You: /sync
+You: /forge-sync
 ```
 
 Reads git diff since last release. Updates:
@@ -199,21 +199,21 @@ Commits: `docs: update documentation for rate-limiting release`
 Any skill runs standalone:
 
 ```
-/review          ← review a branch you built without /build
-/ship            ← ship any branch with passing tests
-/think           ← explore an idea without committing to build it
-/debug           ← debug any issue without a full build cycle
-/retro           ← run a weekly retro any time
+/forge-review          ← review a branch you built without /forge-build
+/forge-ship            ← ship any branch with passing tests
+/forge-think           ← explore an idea without committing to build it
+/forge-debug           ← debug any issue without a full build cycle
+/forge-retro           ← run a weekly retro any time
 ```
 
 ## Output Files Created
 
 | Skill | Output location |
 |-------|----------------|
-| `/think` | `docs/specs/YYYY-MM-DD-<topic>.md` |
-| `/plan` | `docs/plans/YYYY-MM-DD-<topic>.md` |
-| `/build` | Source files + test files + commits |
-| `/review` | Inline report in terminal |
-| `/ship` | Git push + PR URL |
-| `/sync` | Updated doc files + commit |
-| `/retro` | `docs/retros/YYYY-MM-DD.md` |
+| `/forge-think` | `docs/specs/YYYY-MM-DD-<topic>.md` |
+| `/forge-plan` | `docs/plans/YYYY-MM-DD-<topic>.md` |
+| `/forge-build` | Source files + test files + commits |
+| `/forge-review` | Inline report in terminal |
+| `/forge-ship` | Git push + PR URL |
+| `/forge-sync` | Updated doc files + commit |
+| `/forge-retro` | `docs/retros/YYYY-MM-DD.md` |

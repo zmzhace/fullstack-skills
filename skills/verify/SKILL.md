@@ -1,5 +1,5 @@
 ---
-name: verify
+name: forge-verify
 description: "Use before claiming work is complete, fixed, or passing. Hard gate: no completion claims without fresh terminal output as evidence. Evidence before assertions, always."
 ---
 
@@ -97,7 +97,7 @@ Tests passing ≠ requirements met. Before claiming a feature complete:
 3. Verify each item against the running code
 4. Report gaps or completion
 
-### After Running `/build` Tasks
+### After Running `/forge-build` Tasks
 Before saying a task is done:
 - Run the specific test for that task
 - Run the full test suite

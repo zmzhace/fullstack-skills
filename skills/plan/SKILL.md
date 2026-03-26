@@ -1,6 +1,6 @@
 ---
-name: plan
-description: "Turns a spec into architecture diagrams, edge case analysis, and bite-sized TDD-ready tasks. Run after /think, before /build."
+name: forge-plan
+description: "Turns a spec into architecture diagrams, edge case analysis, and bite-sized TDD-ready tasks. Run after /forge-think, before /forge-build."
 ---
 
 # Plan — Architecture + Implementation Plan
@@ -28,7 +28,7 @@ digraph plan {
     rev     [label="Plan self-review", shape=box];
     issues  [label="Issues\nfound?", shape=diamond];
     fix     [label="Fix inline", shape=box];
-    done    [label="Tell user: run /build", shape=doublecircle];
+    done    [label="Tell user: run /forge-build", shape=doublecircle];
 
     start -> found;
     found -> arch [label="yes"];
@@ -57,7 +57,7 @@ Call `EnterPlanMode` before doing anything else. This prevents any accidental fi
 Look for the latest spec in `docs/specs/` using this resolution order:
 1. Sort files matching `docs/specs/YYYY-MM-DD-*.md` by filename descending
 2. If multiple files share the same date, ask the user to select
-3. If no files match the pattern, prompt: "No spec found. Run `/think` first, provide a path, or paste your requirements inline to continue without a spec."
+3. If no files match the pattern, prompt: "No spec found. Run `/forge-think` first, provide a path, or paste your requirements inline to continue without a spec."
 
 ## Step 1: Architecture Diagrams
 
@@ -156,11 +156,11 @@ Fix issues inline. No need to re-review after fixing — just correct and move o
 
 If during architecture analysis or edge case enumeration you discover that the spec's assumptions are invalid, scope is unrealistic, or a critical constraint was missed:
 
-> "Spec issue found: [describe the problem]. This affects the plan because [why]. Recommend re-running `/think` to reframe before continuing."
+> "Spec issue found: [describe the problem]. This affects the plan because [why]. Recommend re-running `/forge-think` to reframe before continuing."
 
 Do not force a plan from a broken spec. Surface the issue and let the user decide.
 
 ## Chaining
 
 After writing and self-reviewing the plan, call `ExitPlanMode`, then tell the user:
-> "Plan written to `docs/plans/<filename>.md`. Run `/build` to implement task by task with TDD."
+> "Plan written to `docs/plans/<filename>.md`. Run `/forge-build` to implement task by task with TDD."

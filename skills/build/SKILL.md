@@ -1,6 +1,6 @@
 ---
-name: build
-description: "Implements the plan using strict TDD. Hard gate: no application logic without a failing test first. Run after /plan, before /review."
+name: forge-build
+description: "Implements the plan using strict TDD. Hard gate: no application logic without a failing test first. Run after /forge-plan, before /forge-review."
 ---
 
 # Build — Test-Driven Implementation
@@ -29,7 +29,7 @@ digraph build {
     undo    [label="Undo refactor\ntry smaller", shape=box];
     commit  [label="Commit", shape=box];
     more    [label="More tasks?", shape=diamond];
-    done    [label="Tell user: run /review", shape=doublecircle];
+    done    [label="Tell user: run /forge-review", shape=doublecircle];
 
     start -> resume;
     resume -> task;
@@ -60,7 +60,7 @@ digraph build {
 Look for the latest plan in `docs/plans/` using this resolution order:
 1. Sort files matching `docs/plans/YYYY-MM-DD-*.md` by filename descending
 2. If multiple files share the same date, ask the user to select
-3. If no files match the pattern, prompt: "No plan found. Run `/plan` first, provide a path, or describe the tasks inline to continue without a plan."
+3. If no files match the pattern, prompt: "No plan found. Run `/forge-plan` first, provide a path, or describe the tasks inline to continue without a plan."
 
 **Resuming a partial build:** Before starting, scan each task in the plan and check if its files already exist and its acceptance criteria are met. List completed tasks as `[done]` and begin from the first incomplete task. Do not re-implement tasks that already pass.
 
@@ -137,11 +137,11 @@ Exceptions — document instead of test:
 
 If a task's implementation fails repeatedly and the root cause isn't a code bug but a design flaw (wrong abstraction, missing dependency, incorrect data model), **stop building and escalate**:
 
-> "Task N is failing because [describe the design problem]. The current plan assumes [assumption] but the codebase shows [reality]. Recommend returning to `/plan` to revise the affected tasks before continuing."
+> "Task N is failing because [describe the design problem]. The current plan assumes [assumption] but the codebase shows [reality]. Recommend returning to `/forge-plan` to revise the affected tasks before continuing."
 
 Do not force a broken design to pass tests. Surface the issue and let the user decide.
 
-Signs you need to escalate to `/plan`:
+Signs you need to escalate to `/forge-plan`:
 - Each fix reveals a new problem in a different component
 - You're writing implementation that no reasonable test could exercise
 - The plan's file structure no longer matches what you're actually building
@@ -149,4 +149,4 @@ Signs you need to escalate to `/plan`:
 ## Chaining
 
 After completing all tasks:
-> "Build complete. Run `/review` for production bug, security, and plan compliance checks before shipping."
+> "Build complete. Run `/forge-review` for production bug, security, and plan compliance checks before shipping."

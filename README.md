@@ -3,13 +3,13 @@
 Thirteen skills for a complete software development workflow — from idea to shipped, maintained, and retrospected.
 
 ```
-/think → /plan → /build → /review → /ship → /sync
+/forge-think → /forge-plan → /forge-build → /forge-review → /forge-ship → /forge-sync
                     ↓              ↑
-                 /debug         /respond
+                 /forge-debug         /forge-respond
                     ↓
-                /verify
-                         /delegate  (parallel execution)
-                         /retro     (end of week)
+                /forge-verify
+                         /forge-delegate  (parallel execution)
+                         /forge-retro     (end of week)
 ```
 
 ## Skills
@@ -18,29 +18,29 @@ Thirteen skills for a complete software development workflow — from idea to sh
 
 | Skill | Role | What it does |
 |-------|------|--------------|
-| `/think` | Product Thinking | Challenges your framing, extracts real pain, writes a spec with self-review |
-| `/plan` | Architecture | ASCII diagrams, edge cases, TDD-ready task breakdown, self-review |
-| `/build` | TDD Implementation | Red → Green → Refactor → Commit, Iron Law on application logic |
-| `/review` | Quality Gate | Production bugs + OWASP/STRIDE security + plan compliance |
-| `/ship` | Verified Release | Pre-flight check, tests, coverage, sync main, open PR |
-| `/sync` | Docs Sync | Update README, API docs, CHANGELOG, guides after every ship |
+| `/forge-think` | Product Thinking | Challenges your framing, extracts real pain, writes a spec with self-review |
+| `/forge-plan` | Architecture | ASCII diagrams, edge cases, TDD-ready task breakdown, self-review |
+| `/forge-build` | TDD Implementation | Red → Green → Refactor → Commit, Iron Law on application logic |
+| `/forge-review` | Quality Gate | Production bugs + OWASP/STRIDE security + plan compliance |
+| `/forge-ship` | Verified Release | Pre-flight check, tests, coverage, sync main, open PR |
+| `/forge-sync` | Docs Sync | Update README, API docs, CHANGELOG, guides after every ship |
 
 ### Quality & Safety
 
 | Skill | Role | What it does |
 |-------|------|--------------|
-| `/debug` | Root Cause Analysis | Four-phase: investigate → pattern → hypothesis → fix. No guessing. |
-| `/verify` | Evidence Gate | No claiming "done" without terminal output as proof |
-| `/respond` | Review Reception | Evaluate feedback technically before implementing. Push back when wrong. |
+| `/forge-debug` | Root Cause Analysis | Four-phase: investigate → pattern → hypothesis → fix. No guessing. |
+| `/forge-verify` | Evidence Gate | No claiming "done" without terminal output as proof |
+| `/forge-respond` | Review Reception | Evaluate feedback technically before implementing. Push back when wrong. |
 
 ### Execution
 
 | Skill | Role | What it does |
 |-------|------|--------------|
-| `/delegate` | Subagent Execution | Sequential / inline / parallel execution with role injection and model selection |
-| `/worktree` | Isolated Workspace | Create, setup, and validate git worktrees for parallel development |
-| `/retro` | Weekly Retrospective | What shipped, contributor breakdown, streak, one action item |
-| `/write-skill` | Skill Authoring | TDD for documentation — baseline test, minimal skill, bulletproofing |
+| `/forge-delegate` | Subagent Execution | Sequential / inline / parallel execution with role injection and model selection |
+| `/forge-worktree` | Isolated Workspace | Create, setup, and validate git worktrees for parallel development |
+| `/forge-retro` | Weekly Retrospective | What shipped, contributor breakdown, streak, one action item |
+| `/forge-write-skill` | Skill Authoring | TDD for documentation — baseline test, minimal skill, bulletproofing |
 
 ## Install
 
@@ -52,31 +52,31 @@ Add to your project's `CLAUDE.md`:
 
 ```markdown
 ## Forge Skills
-Available: /think, /plan, /build, /review, /ship, /sync, /debug, /verify, /respond, /delegate, /retro
+Available: /forge-think, /forge-plan, /forge-build, /forge-review, /forge-ship, /forge-sync, /forge-debug, /forge-verify, /forge-respond, /forge-delegate, /forge-retro, /forge-worktree, /forge-write-skill
 ```
 
 ## Quick Start
 
 ```
-/think      ← describe what you want to build
-/plan       ← architecture + tasks from your spec
-/build      ← TDD implementation, task by task
-/review     ← production bugs + security + plan compliance
-/ship       ← verify, push, open PR
-/sync       ← update docs to match what shipped
+/forge-think      ← describe what you want to build
+/forge-plan       ← architecture + tasks from your spec
+/forge-build      ← TDD implementation, task by task
+/forge-review     ← production bugs + security + plan compliance
+/forge-ship       ← verify, push, open PR
+/forge-sync       ← update docs to match what shipped
 ```
 
-Hit a bug during `/build`? Run `/debug` first, then `/verify` before claiming it's fixed.
-Received PR feedback? Use `/respond` to evaluate it before making changes.
-Multiple independent tasks? Use `/delegate` to run them in parallel with review gates.
+Hit a bug during `/forge-build`? Run `/forge-debug` first, then `/forge-verify` before claiming it's fixed.
+Received PR feedback? Use `/forge-respond` to evaluate it before making changes.
+Multiple independent tasks? Use `/forge-delegate` to run them in parallel with review gates.
 
 ## Design Principles
 
-1. **Evidence before assertions** — `/verify` and `/ship` require real terminal output, not claims
-2. **Root cause over symptoms** — `/debug` enforces four phases before any fix
-3. **No auto-fix** — `/review` presents all findings for human decision; nothing changed silently
-4. **Sequential but not mandatory** — any skill runs standalone; only `/ship` hard-blocks on test failure
-5. **Self-correcting** — `/think` and `/plan` both include self-review before handoff
+1. **Evidence before assertions** — `/forge-verify` and `/forge-ship` require real terminal output, not claims
+2. **Root cause over symptoms** — `/forge-debug` enforces four phases before any fix
+3. **No auto-fix** — `/forge-review` presents all findings for human decision; nothing changed silently
+4. **Sequential but not mandatory** — any skill runs standalone; only `/forge-ship` hard-blocks on test failure
+5. **Self-correcting** — `/forge-think` and `/forge-plan` both include self-review before handoff
 
 ## Why This Works
 

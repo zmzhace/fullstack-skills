@@ -1,5 +1,5 @@
 ---
-name: write-skill
+name: forge-write-skill
 description: "Use when creating a new Forge skill or editing an existing one. Covers naming conventions, frontmatter rules, flowchart usage, CSO (Claude Search Optimization), and the test-before-deploy requirement."
 ---
 
@@ -178,7 +178,7 @@ digraph example {
 
 ## Bulletproofing Discipline Skills
 
-For skills that enforce a rule (like `/debug`, `/verify`, `/build`), agents will find loopholes under pressure. Close them explicitly.
+For skills that enforce a rule (like `/forge-debug`, `/forge-verify`, `/forge-build`), agents will find loopholes under pressure. Close them explicitly.
 
 **1. Forbid specific workarounds, not just the general rule:**
 ```markdown
