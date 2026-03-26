@@ -7,12 +7,16 @@ description: "Turns a spec into architecture diagrams, edge case analysis, and b
 
 Turn a spec into a concrete implementation plan with architecture diagrams, edge cases, and TDD-ready tasks.
 
+<HARD-GATE>
+Invoke `EnterPlanMode` immediately. Do not read files, write code, or take any action until you are in plan mode. Exit plan mode (`ExitPlanMode`) only after the plan file is written and self-reviewed.
+</HARD-GATE>
+
 ## Process Flow
 
 ```dot
 digraph plan {
     rankdir=TB;
-    start   [label="Load spec", shape=doublecircle];
+    start   [label="EnterPlanMode", shape=doublecircle];
     found   [label="Spec found?", shape=diamond];
     warn    [label="Warn: no spec\nAsk to continue", shape=box];
     arch    [label="Step 1: Architecture diagrams", shape=box];
@@ -43,6 +47,10 @@ digraph plan {
     issues -> done [label="no"];
 }
 ```
+
+## Step 0: Enter Plan Mode
+
+Call `EnterPlanMode` before doing anything else. This prevents any accidental file writes or command execution during the planning phase. You will call `ExitPlanMode` after the plan file is written and self-reviewed.
 
 ## Starting Check
 
@@ -154,5 +162,5 @@ Do not force a plan from a broken spec. Surface the issue and let the user decid
 
 ## Chaining
 
-After writing and self-reviewing the plan:
+After writing and self-reviewing the plan, call `ExitPlanMode`, then tell the user:
 > "Plan written to `docs/plans/<filename>.md`. Run `/build` to implement task by task with TDD."
