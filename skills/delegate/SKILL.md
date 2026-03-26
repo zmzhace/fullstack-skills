@@ -12,6 +12,19 @@ You delegate tasks to agents with precisely crafted, isolated context. They neve
 - **Inline** — Execute a plan directly in this session, batch by batch, with a checkpoint after each batch. Simpler, no subagent overhead.
 - **Parallel** — Dispatch multiple agents concurrently for independent problems.
 
+## Agent Roles
+
+Every subagent has a role. A role definition gives the agent a precise identity: who they are, what their mandate is, what they cannot do, and exactly how to format their output. This eliminates ambiguity — the agent does not fill gaps with assumptions.
+
+| Role file | Agent type | Mandate |
+|-----------|-----------|---------|
+| `roles/implementer.md` | Implementer | TDD implementation of a single scoped task |
+| `roles/spec-reviewer.md` | Spec Reviewer | Binary compliance audit: spec vs. implementation |
+| `roles/quality-reviewer.md` | Quality Reviewer | Production-readiness check (not spec compliance) |
+| `roles/debugger.md` | Debugger | Root cause investigation and fix |
+
+**How to inject a role:** Read the role file, prepend its full content to the subagent prompt, add `---` as a separator, then add task-specific context. See the prompt templates below.
+
 ## When to Use Which Mode
 
 ```dot
@@ -89,65 +102,84 @@ digraph sequential {
 }
 ```
 
+### Role Injection
+
+Every subagent prompt begins with its role definition. This gives the agent a precise identity — who they are, what they can and cannot do — before they see any task context. Role definitions live in `roles/` and are prepended verbatim.
+
+**To build a subagent prompt:**
+1. Read the appropriate role file from `roles/`
+2. Append `---` as a separator
+3. Append the task-specific context below
+
+This is not optional. A subagent without a role is a blank slate that will fill in gaps with assumptions.
+
+---
+
 ### Implementer Prompt Template
 
-When dispatching the implementer subagent, provide:
-
 ```
+[PASTE FULL CONTENT OF roles/implementer.md HERE]
+
+---
+
 Task: [Task N name from plan]
 
 Codebase context:
 - Tech stack: [language, framework, test runner]
-- Relevant existing files: [list files the task touches]
+- Relevant existing files: [list files the task touches — these are your scope]
 - Conventions to follow: [test naming, import style, etc.]
 
 Task specification:
 [Full task text from the plan, verbatim — do NOT summarize]
-
-Your job:
-1. Implement using TDD (/build loop: failing test → minimal impl → refactor → commit)
-2. Run the full test suite — all must pass before reporting done
-3. Self-review: check for spec drift, dead code, obvious issues
-4. Report status: DONE / DONE_WITH_CONCERNS / NEEDS_CONTEXT / BLOCKED
-
-Do NOT read any other plan or spec files — use only what's provided here.
 ```
+
+---
 
 ### Spec Reviewer Prompt Template
 
 ```
-Review the implementation of Task N against this spec:
+[PASTE FULL CONTENT OF roles/spec-reviewer.md HERE]
 
+---
+
+Task N specification (what the implementer was supposed to build):
 [Full task text from plan, verbatim]
 
-Changed files:
-[List commits and changed files since last task]
+Changed files since last task:
+[List commits and changed files]
 
-Check only:
-1. Does the implementation fulfill every requirement in the spec?
-2. Is there anything in the spec that was NOT implemented?
-3. Is there anything implemented that is NOT in the spec (over-building)?
-
-Report: ✅ COMPLIANT or ❌ ISSUES with specific gaps listed.
-Do NOT evaluate code quality — that's a separate review.
+Audit each requirement. Produce the verdict table and final verdict.
 ```
+
+---
 
 ### Quality Reviewer Prompt Template
 
 ```
-Review the code quality of this implementation (spec compliance already verified):
+[PASTE FULL CONTENT OF roles/quality-reviewer.md HERE]
 
-Changed files:
+---
+
+Changed files (spec compliance already verified):
 [List commits and changed files since last task]
 
-Check for:
-- Race conditions, resource leaks, error paths not handled
-- N+1 queries, validation gaps
-- Unit design: each function has one clear purpose?
-- Naming clarity, obvious duplication
+Review for production readiness. Produce the verdict.
+```
 
-Report: ✅ APPROVED or ❌ ISSUES with specific findings.
-Do NOT check spec compliance — that was already verified.
+---
+
+### Debugger Prompt Template
+
+```
+[PASTE FULL CONTENT OF roles/debugger.md HERE]
+
+---
+
+Failing tests:
+1. "[test name]" — [error message and stack trace]
+2. "[test name]" — [error message and stack trace]
+
+Your scope: ONLY [this file / this subsystem].
 ```
 
 ### Handling Subagent Status
@@ -264,25 +296,18 @@ digraph parallel {
 }
 ```
 
-### Agent Prompt Template
+### Agent Prompt Template (Parallel mode uses Debugger role)
 
 ```
-Fix the failing tests in [specific file or subsystem]:
+[PASTE FULL CONTENT OF roles/debugger.md HERE]
 
-Failures:
-1. "[test name]" — [error message]
-2. "[test name]" — [error message]
+---
+
+Failing tests in [specific file or subsystem]:
+1. "[test name]" — [error message and stack trace]
+2. "[test name]" — [error message and stack trace]
 
 Your scope: ONLY [this file / this subsystem]. Do not change other code.
-
-Your task:
-1. Read the failing tests and understand what each verifies
-2. Identify the root cause — don't just fix symptoms
-3. Fix the root cause
-4. Run the suite for this file: all tests must pass
-5. Return: what you found, what you changed
-
-Do NOT increase timeouts as a fix. Do NOT change test expectations unless the behavior deliberately changed.
 ```
 
 ### After Agents Return
